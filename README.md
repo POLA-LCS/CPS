@@ -3,5 +3,9 @@
 
 ### Usage
 ```
+Run commands
+- cps <name>
 
+Set command
+- cps <name> "<command>"
 ```
