@@ -1,0 +1,21 @@
+{
+    "!default": [
+        ""
+    ],
+    "!first": [
+        ""
+    ],
+    "!last": [
+        ""
+    ],
+    "on": [
+        "echo ON: First and last",
+        "cps !first = 'cls'",
+        "cps !last = 'echo Finished'"
+    ],
+    "off": [
+        "echo OFF: First and last",
+        "cps !first = ''",
+        "cps !last = ''"
+    ]
+}
