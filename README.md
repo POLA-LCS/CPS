@@ -1,7 +1,8 @@
 # CPS - Command Prompt Saver for Windows 10+
 
 ## Usage
-```Info:
+```
+Info:
     cps (--help | -h)     Display help text
     cps (--info | -i)     Display all the key infos
     cps a (--info | -i)   Display "a" key info
@@ -21,4 +22,5 @@ Binary operators:
     ++    Append to the last command a string
     +*    Prepend to the last command a string
     *+    Append to the first command a string
-    **    Prepend to the first command a string```
+    **    Prepend to the first command a string
+```
