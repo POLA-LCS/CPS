@@ -3,9 +3,17 @@
 
 ### Usage
 ```
-Run commands
-- cps <name>
+Run commands:
+- cps
+- cps <key>
+- cps <key> --clean | -c
 
-Set command
-- cps <name> "<command>"
+Set commands:
+- cps <key> = '<com>'
+- cps <key> = <key2>
+- cps <key> + '<com>'
+- cps <key> + <key2>
+- cps <key> * '<com>'
+- cps <key> * <key2>
+- cps <key> | <key2>
 ```
