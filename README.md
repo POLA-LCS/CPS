@@ -28,7 +28,7 @@ Binary operators:
     =     Set a string or another key
     +     Append a string or another key
     *     Prepend a command or another key
-    |     Switch a key with another key
+    #     Switch a key with another key
     ++    Append to the last command a string
     +*    Prepend to the last command a string
     *+    Append to the first command a string

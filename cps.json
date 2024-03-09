@@ -1,7 +1,4 @@
 {
-    "!default": [
-        ""
-    ],
     "!first": [
         ""
     ],
@@ -17,5 +14,8 @@
         "echo OFF: First and last",
         "cps !first = ''",
         "cps !last = ''"
+    ],
+    "!default": [
+        ""
     ]
 }
