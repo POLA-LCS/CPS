@@ -60,20 +60,110 @@ def HELP():
     - a = .      Delete "a" key
     - a + .      Pop the last element of "a" key
     - a * .      Pop the first element of "a" key
-    - a | b      Switch "a" key with "b" key""")
+    - a ++ .     Erases the last commands character
+    - a | b      Switch "a" key with "b" key
+    - a ++ 'b'   Write in 'b' in the last command""")
 
 if __name__ == '__main__':
     try:
         argc = len(argv)
         
         data = update_cps()
-        print(argv)
-        if argc == 1:
+        if argc == 1: # cps
             run_commands(data['!first'])
             run_commands(data['!default'])
             run_commands(data['!last'])
-        elif argc == 2:
+        elif argc == 2: # cps (<flag> | <key>)
             if argv[1] in ['--help', '-h']:
                 HELP()
+            elif argv[1] in ['--open', '-o']:
+                run_commands(['cps.json'])
+            elif argv[1] in ['--info', '-i']:
+                for key in data:
+                    print(f'{key}:  \t{data[key]}')
+            elif argv[1] in ['--clean', '-c']:
+                run_commands(data['!default'])
+            elif argv[1] == '.':
+                run_commands(data['!first'])
+                run_commands(data['!last'])
+            else:
+                _ = data[argv[1]]
+                run_commands(data['!first'])
+                run_commands(data[argv[1]])
+                run_commands(data['!last'])
+        elif argc == 3: # cps <key> <flag>
+            if argv[2] in ['--info', '-i']:
+                print(f'{argv[1]}:  \t{data[argv[1]]}')
+            elif argv[2] in ['--clean', '-c']:
+                if argv[1] != '.':
+                    run_commands(data[argv[1]])
+        elif argc >= 4: # cps <key> <op> (<key> | <val>)
+            record = ''
+            if argv[3].startswith("\'"):
+                for i in range(3, argc):
+                    record += argv[i] + ' '
+            if record:
+                if argv[2] == '++':
+                    set_key(argv[1], data[argv[1]][:-1] + [data[argv[1]][-1] + record[1:-2]])
+                elif argv[2] == '**':
+                    set_key(argv[1], [record[1:-2] + data[argv[1]][0]] + data[argv[1]][1:])
+                elif argv[2] == '+*':
+                    set_key(argv[1], data[argv[1]][:-1] + [record[1:-2] + data[argv[1]][-1]])
+                elif argv[2] == '*+':
+                    set_key(argv[1], [data[argv[1]][0] + record[1:-2]] + data[argv[1]][1:])
+                elif argv[2] == '=':
+                    set_key(argv[1], [record[1:-2]])
+                elif argv[2] == '+':
+                    set_key(argv[1], data[argv[1]] + [record[1:-2]])
+                elif argv[2] == '*':
+                    set_key(argv[1], [record[1:-2]] + data[argv[1]])
+            else:
+                if argv[2] == '|':
+                    a, b = data[argv[1]], data[argv[3]]
+                    set_key(argv[1], b)
+                    set_key(argv[3], a)
+                elif argv[2] == '++':
+                    if argv[3] == '.':
+                        set_key(argv[1], data[argv[1]][:-1] + [data[argv[1]][-1][:-1]])
+                    else:
+                        assert False, "[NOT IMPLEMENTED] a ++ b"
+                elif argv[2] == '+*':
+                    if argv[3] == '.':
+                        set_key(argv[1], data[argv[1]][:-1] + [data[argv[1]][-1][1:]])
+                    else:
+                        assert False, "[NOT IMPLEMENTED] a *+ b"
+                elif argv[2] == '*+':
+                    if argv[3] == '.':
+                        set_key(argv[1], [data[argv[1]][0][:-1]] + data[argv[1]][1:])
+                    else:
+                        assert False, "[NOT IMPLEMENTED] a *+ b"
+                elif argv[2] == '**':
+                    if argv[3] == '.':
+                        set_key(argv[1], [data[argv[1]][0][1:]] + data[argv[1]][1:])
+                    else:
+                        assert False, "[NOT IMPLEMENTED] a ** b"
+                elif argv[2] == '=':
+                    if argv[3] == '.':
+                        set_key(argv[1], None)
+                    else:
+                        set_key(argv[1], data[argv[3]])
+                elif argv[2] == '+':
+                    if argv[3] == '.':
+                        set_key(argv[1], data[argv[1]][:-1])
+                    else:
+                        set_key(argv[1], data[argv[1]] + data[argv[3]])
+                elif argv[2] == '*':
+                    if argv[3] == '.':
+                        set_key(argv[1], data[argv[1]][1:])
+                    else:
+                        set_key(argv[1], data[argv[3]] + data[argv[1]])
     except KeyError as err:
-        print(f"[ERROR] Doesnt exists: {err.args[0]}")
+        print(f"[ERROR] Doesn't exists: {err.args[0]}")
+    except (json.decoder.JSONDecodeError, FileNotFoundError):
+        print("Getting ready cps.json file...")
+        with open(PATH + '\\cps.json', 'w') as file:
+            file.write('{}')
+        update_cps()
+        print("Finished.")
+    except AssertionError as ass:
+        print(ass)

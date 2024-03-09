@@ -10,8 +10,10 @@ Info:
 
 Run:
 - cps                   Run !first, !default and !last
+- cps .                 Run !first and !last
 - cps a                 Run !first, "a" key and !last
 - cps (--clean | -c)    Run !default
+- cps . (--clean | -c)  Doens't run anything...
 - cps a (--clean | -c)  Run "a" key
 
 Set (prefixed by cps):
@@ -24,5 +26,6 @@ Set (prefixed by cps):
 - a = .      Delete "a" key
 - a + .      Pop the last element of "a" key
 - a * .      Pop the first element of "a" key
-- a | b      Switche "a" key with "b" key
+- a | b      Switch "a" key with "b" key
+- a ++ 'b'   
 ```
