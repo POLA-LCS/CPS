@@ -1,11 +1,11 @@
 {
-    "--default": [
-        "echo Hola, CPS!"
+    "!default": [
+        "echo Hello, CPS!"
     ],
-    "--first": [
+    "!first": [
         "cls"
     ],
-    "--last": [
+    "!last": [
         ""
     ]
 }
