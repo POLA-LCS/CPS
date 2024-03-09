@@ -17,8 +17,8 @@ def read_cps() -> dict:
                 if not isinstance(value, list):
                     data[key] = [value]
         return data
-    except (json.decoder.JSONDecodeError, FileNotFoundError):
-        return {'!default': "echo Hello, CPS!", '!first': "cls", '!last': ""}
+    except FileNotFoundError:
+        return {'!default': ["echo Hello, CPS!"], '!first': ["cls"], '!last': [""]}
 
 def update_cps():
     data = read_cps()
@@ -56,7 +56,7 @@ Binary operators:
     =     Set a string or another key
     +     Append a string or another key
     *     Prepend a command or another key
-    |     Switch a key with another key
+    #     Switch a key with another key
     ++    Append to the last command a string
     +*    Prepend to the last command a string
     *+    Append to the first command a string
@@ -103,7 +103,7 @@ if __name__ == '__main__':
             record = ''
             if argv[3].startswith("\'"):
                 record = ' '.join(argv[3:])
-            first = data[argv[1]]
+            first = data.get(argv[1])
             if record:
                 if argv[2] == '++':
                     set_key(argv[1], first[:-1] + [first[-1] + record[1:-1]])
@@ -153,3 +153,6 @@ if __name__ == '__main__':
         print(f"[ERROR] Doesn't exist: {err.args[0]}")
     except AssertionError as ass:
         print(ass)
+    except json.decoder.JSONDecodeError as err:
+        print(err)
+        print('[ERROR] You probably forgot or add an extra comma...')
