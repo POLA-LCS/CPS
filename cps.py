@@ -60,7 +60,7 @@ def HELP():
     - a = .      Delete "a" key
     - a + .      Pop the last element of "a" key
     - a * .      Pop the first element of "a" key
-    - a | b      Switche "a" key with "b" key""")
+    - a | b      Switch "a" key with "b" key""")
 
 if __name__ == '__main__':
     try:
