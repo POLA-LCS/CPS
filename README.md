@@ -4,12 +4,13 @@ This is software designed for those who are accustomed to the command console to
 It uses batch commands and it is created with Python "subprocess", "os" and "sys" so maybe it isn't compatible with Linux or other OS. 
 
 ## Usage
-- Set a directory for it.
-- Execute without parameters (this might create the `cps.json` file and fill it with default values).
+- Set a directory for CPS (make sure it's not read-only).
+- Run `cps.py` without parameters (this might create the `cps.json` file and fill it with default values).
 - Add the directory to PATH.
-- Type `cps --help` to make sure it works.
+- Type `cps --help` in another directory to make sure it works.
+- Start creating your first key-block.
 - - -
-### This is the view when you type `cps --help` or `cps -h`
+### This is the view when you run `cps --help` or `cps -h`
 ```
 Info:
     cps (--help | -h)     Display help text
