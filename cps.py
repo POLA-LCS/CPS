@@ -9,7 +9,7 @@ def read_cps() -> dict:
     data = {}
     with open(PATH + '\\cps.json', 'r') as file:
         data = json.load(file)
-        data.setdefault('--default', "echo Hola, CPS!")
+        data.setdefault('--default', "echo Hello, CPS!")
         data.setdefault('--first', "cls")
         data.setdefault('--last', "")
         for key in data:
