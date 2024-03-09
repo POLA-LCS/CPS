@@ -6,8 +6,8 @@ It uses batch commands and it is created with Python "subprocess", "os" and "sys
 ## Usage
 - Set a directory for it.
 - Execute without parameters (this might create the `cps.json` file and fill it with default values).
-- Type `cps --info` to make sure it works.
-- Enjoy...
+- Add the directory to PATH.
+- Type `cps --help` to make sure it works.
 - - -
 ### This is the view when you type `cps --help` or `cps -h`
 ```
