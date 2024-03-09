@@ -1,4 +1,5 @@
-# CPS - Command Prompt Saver for Windows 10+
+# CPS - Command Prompt Saver
+## For Windows 10+
 
 ## Usage
 ```
