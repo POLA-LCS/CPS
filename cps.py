@@ -17,8 +17,8 @@ O_APP = '+'
 O_PRE = '-'
 O_STC = '#'
 
-C_INFO = ['--info', '-i']
-C_HELP = ['--help', '-h']
+C_INFO = ('--info', '-i')
+C_HELP = ('--help', '-h')
 
 codeType = list[str]
 funcType = tuple[dict[str, str], codeType]
@@ -78,9 +78,9 @@ Nomenclature:
     F = Function  :    The name of a function
     V = Value     :    A string value
 Info:
-    cps {C_HELP}    Display this text
-    cps {C_INFO}    Display all the user keys info
-    cps F {C_INFO}  Display key info
+    cps ({C_HELP[0]} | {C_HELP[1]})    Display this text
+    cps ({C_INFO[0]} | {C_INFO[1]})    Display all the user keys info
+    cps F ({C_INFO[0]} | {C_INFO[1]})  Display key info
 Run:
     cps               Run 0 with default arguments
     cps F             Run F with default arguments

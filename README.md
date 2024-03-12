@@ -18,27 +18,27 @@ Nomenclature:
     V = Value      :    A string value
     %%V = F values :    The code of a function
 Info:
-    [--help, -h]    Display this text
-    [--info, -i]    Display all the user keys info
-    F [--info, -i]  Display key info
+    cps (--help | -h)    Display this text
+    cps (--info | -i)    Display all the user keys info
+    cps F (--info | -i)  Display key info
 Run:
-                  Run 0 with default arguments
-    F             Run F with default arguments
-    F % <p...>    Run F with arguments <p>
+    cps               Run 0 with default arguments
+    cps F             Run F with default arguments
+    cps F % <p...>    Run F with arguments <p>
     
     Tip: Dot (.) skips argument assign
 Set:
-    F = V    Set V to F
-    F + V    Append V with the same logic as set
-    F - V    Prepend V with the same logic as set
-    F ^ F2   Switch F with F2
+    cps F = V    Set V to F
+    cps F + V    Append V with the same logic as set
+    cps F - V    Prepend V with the same logic as set
+    cps F ^ F2   Switch F with F2
     
     Tip: "%%V" = The values of a function (cps F = %%V)
 Delete:
-    F = .    Deletes F
-    F + .    Deletes the last command of F
-    F - .    Deletes the first command of F
+    cps F = .    Deletes F
+    cps F + .    Deletes the last command of F
+    cps F - .    Deletes the first command of F
 Arguments:
-    F %% A V       Set function F argument A value to V
-    F %% A .       Deletes argument A from F
+    cps F %% A V       Set function F argument A value to V
+    cps F %% A .       Deletes argument A from F
 ```
