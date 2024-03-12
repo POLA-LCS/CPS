@@ -7,11 +7,5 @@
             "cls",
             "echo Hello, %%name!"
         ]
-    ],
-    "a": [
-        {},
-        [
-            "echo Hola"
-        ]
     ]
 }

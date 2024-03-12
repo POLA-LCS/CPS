@@ -2,10 +2,10 @@ import json
 from subprocess import run
 from os.path import dirname, abspath
 from sys import argv
-from typing import Any
+from typing import Any, List, Tuple, Dict
 
 PATH = dirname(abspath(__file__))
-JSON_PATH = PATH + '\\cps.json'
+JSON_PATH = PATH + '/cps.json'
 INDENT = 4
 
 O_PARAM = '%'
@@ -20,28 +20,28 @@ O_STC = '#'
 C_INFO = ('--info', '-i')
 C_HELP = ('--help', '-h')
 
-codeType = list[str]
-funcType = tuple[dict[str, str], codeType]
-dataBase = dict[str, funcType]
+CodeType = List[str]
+FuncType = Tuple[Dict[str, str], CodeType]
+DataBase = Dict[str, FuncType]
 
-def get_blocks() -> dataBase:
+def get_blocks() -> DataBase:
     with open(JSON_PATH, 'r') as file:
         return json.load(file)
 
-def set_default(data: dataBase):
+def set_default(data: DataBase):
     with open(JSON_PATH, 'w') as file:
         data.setdefault('0', ({'name': 'CPS'}, ['cls', 'echo Hello, %%name!']))
         for key in data:
             block = data[key][1]
             if not isinstance(block, list):
-                data[key[1]] = [block]
+                data[key] = (data[key][0], [block])
         json.dump(data, file, indent=INDENT)
 
-def default_arguments(func: funcType) -> list[str]:
+def default_arguments(func: FuncType) -> CodeType:
     param, code = func
     if len(param) == 0:
         return code
-    new_code: list[str] = []
+    new_code: CodeType = []
     for line in code:
         for i, name in enumerate(param):
             template = VAR_TEMPLATE.replace('#', name)
@@ -50,13 +50,13 @@ def default_arguments(func: funcType) -> list[str]:
     
     return new_code
 
-def replace_arguments(func: funcType, input_param: list | None = None) -> list[str]:
+def replace_arguments(func: FuncType, input_param: List[str] | None = None) -> CodeType:
     if not input_param:
         return default_arguments(func)
     param, code = func
     if len(param) == 0:
         return code
-    new_code: list[str] = []
+    new_code: CodeType = []
     for line in code:
         for i, name in enumerate(param):
             template = VAR_TEMPLATE.replace('#', name)
@@ -68,7 +68,7 @@ def replace_arguments(func: funcType, input_param: list | None = None) -> list[s
         new_code.append(line)
     return new_code
     
-def run_commands(func: list[str]):
+def run_commands(func: CodeType):
     for comm in func:
         run(comm, shell=True)
     
@@ -102,7 +102,7 @@ Arguments:
     cps F %% A V       Set function F argument A value to V
     cps F %% A .       Deletes argument A from F
     """)
-    
+
 if __name__ == '__main__':
     try:
         data = get_blocks()
@@ -117,17 +117,17 @@ if __name__ == '__main__':
                 # DISPLAY HELP
                 display_help()
             elif argv[1] in C_INFO: # cps --info
-                # INFO (SKIPS 0 IF THERES MORE)
+                # INFO (SKIPS 0 IF THERE'S MORE)
                 if len(data) == 1:
-                    print(f'[CPS] 0 {data['0'][0]}')
+                    print(f"[CPS] 0 {data['0'][0]}")
                     for line in data['0'][1]:
-                        print(f'  - {line}')
+                        print(f"  - {line}")
                 else:
-                    print(f'[CPS] Info:')
+                    print("[CPS] Info:")
                     for key in data:
                         if key == '0':
                             continue
-                        print(f'  -  {key} {data[key][0]} : {data[key][1]}')
+                        print(f"  -  {key} {data[key][0]} : {data[key][1]}")
             else: # cps <k>
                 # DEFAULT RUN
                 run_commands(replace_arguments(data[argv[1]]))
@@ -136,7 +136,7 @@ if __name__ == '__main__':
                 # SET A KEY PARAMETER
                 if argv[4] == '.':
                     del data[argv[1]][0][argv[3]]
-                    print(f'[CPS] {argv[1]} -> {argv[3]} was deleted.')
+                    print(f"[CPS] {argv[1]} -> {argv[3]} was deleted.")
                 else:
                     data[argv[1]][0][argv[3]] = argv[4]
             elif argv[2] == O_PARAM: # cps <k> % <p...>
@@ -152,7 +152,7 @@ if __name__ == '__main__':
                     # SET TO KEY A VALUE
                     if argv[3] == '.': # deletes key
                         del data[argv[1]]
-                        print(f'[CPS] Deleted: {argv[1]}')
+                        print(f"[CPS] Deleted: {argv[1]}")
                     elif data.get(argv[1]):
                         if bar: # set key values to key
                             data[argv[1]][1] = data[bar][1]
@@ -160,10 +160,10 @@ if __name__ == '__main__':
                             data[argv[1]][1] = [argv[3]]
                     elif bar: # create key with key values
                         data[argv[1]] = data[bar]
-                        print(f'[CPS] Created: {argv[1]}')
+                        print(f"[CPS] Created: {argv[1]}")
                     else: # create key with value
                         data[argv[1]] = ({}, [argv[3]])
-                        print(f'[CPS] Created: {argv[1]}')
+                        print(f"[CPS] Created: {argv[1]}")
                 elif argv[2] == O_APP: # cps <k> + <value / key>
                     # APPEND TO KEY A VALUE
                     if argv[3] == '.': # deletes the last command
@@ -173,16 +173,16 @@ if __name__ == '__main__':
                     else: # appends a value
                         data[argv[1]][1].append(argv[3])
                 elif argv[2] == O_PRE:
-                    # PREPREND TO KEY A VALUE
+                    # PREPEND TO KEY A VALUE
                     if argv[3] == '.': # deletes the first command
                         del data[argv[1]][1][0]
                     elif bar: # prepends a key values
                         data[argv[1]][1] = data[bar][1] + data[argv[1]][1]
-                    else: # preprends a value
+                    else: # prepends a value
                         data[argv[1]][1] = [argv[3]] + data[argv[1]][1]
                 elif argv[2] == O_STC:
                     data[argv[1]], data[argv[3]] = data[argv[3]], data[argv[1]]
-                    print(f'[CPS] Switched {argv[1]} with {argv[3]}')
+                    print(f"[CPS] Switched {argv[1]} with {argv[3]}")
         elif argc >= 2:
             if argv[1] == O_PARAM:
                 # RUN DEFAULT WITH PARAMETERS
@@ -191,10 +191,10 @@ if __name__ == '__main__':
                 first = data[argv[1]]
                 if argv[2] in C_INFO: # cps <k> --info
                     # KEY INFO
-                    print(f'[CPS] {argv[1]} {first[0]}:')
+                    print(f"[CPS] {argv[1]} {first[0]}:")
                     for line in first[1]:
-                        print(f'  -  {line}')
-        set_default(data) # FINISHED AND UPDATE
+                        print(f"  -  {line}")
+        set_default(data)
     except FileNotFoundError as not_found:
         print(f"[CPS] It seems there's is no data loaded")
         result = input("[CPS] Create new data file? (Y/...) >> ")
@@ -203,10 +203,9 @@ if __name__ == '__main__':
                 file.write('{\n\n}')
                 print('[CPS] New data file was successfully created.')
     except KeyError as kerr:
-        print(f"[CPS ERROR] Doesn't exists: {kerr.args[0]}")
+        print(f"[CPS ERROR] Doesn't exist: {kerr.args[0]}")
     except AssertionError as ass:
         print(ass)
     except json.decoder.JSONDecodeError as json_error:
         print(f"[CPS ERROR] File content not valid:")
         print(json_error, json_error)
-        
