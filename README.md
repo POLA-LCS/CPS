@@ -8,29 +8,37 @@ It uses batch commands and it is created with Python "subprocess", "os" and "sys
 - Run `cps.py` without parameters (this might create the `cps.json` file and fill it with default values).
 - Add the directory to PATH.
 - Type `cps --help` in another directory to make sure it works.
-- Start creating your first key-block.
+- Start creating your first function.
 - - -
-### This is the view when you run `cps --help` or `cps -h`
+### CODE: This is the view when you run `cps --help` or `cps -h`
 ```
+[CPS] Help:
+Nomenclature:
+    F = Function   :    The name of a function
+    V = Value      :    A string value
+    %%V = F values :    The code of a function
 Info:
-    cps (--help | -h)     Display help text
-    cps (--info | -i)     Display all the key infos
-    cps a (--info | -i)   Display "a" key info
-
+    {C_HELP}    Display this text
+    {C_INFO}    Display all the user keys info
+    F {C_INFO}  Display key info
 Run:
-  (--clean | -c) excepts !first and !last to be executed.
-    cps                   Run !first, !default and !last
-    cps .                 Run !first and !last
-    cps a                 Run !first, "a" key and !last
-
-Binary operators:
-  Dot (.) is used to delete in case of assign or pop in case of append or prepend.
-    =     Set a string or another key
-    +     Append a string or another key
-    *     Prepend a command or another key
-    #     Switch a key with another key
-    ++    Append to the last command a string
-    +*    Prepend to the last command a string
-    *+    Append to the first command a string
-    **    Prepend to the first command a string
+                  Run 0 with default arguments
+    F             Run F with default arguments
+    F % <p...>    Run F with arguments <p>
+    
+    Tip: Dot (.) skips argument assign
+Set:
+    F {O_SET} V    Set V to F
+    F {O_APP} V    Append V with the same logic as set
+    F {O_PRE} V    Prepend V with the same logic as set
+    F {O_STC} F2   Switch F with F2
+    
+    Tip: "%%V" = The values of a function (cps F = %%V)
+Delete:
+    F {O_SET} .    Deletes F
+    F {O_APP} .    Deletes the last command of F
+    F {O_PRE} .    Deletes the first command of F
+Arguments:
+    F %% A V       Set function F argument A value to V
+    F %% A .       Deletes argument A from F
 ```
