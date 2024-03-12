@@ -18,9 +18,9 @@ Nomenclature:
     V = Value      :    A string value
     %%V = F values :    The code of a function
 Info:
-    {C_HELP}    Display this text
-    {C_INFO}    Display all the user keys info
-    F {C_INFO}  Display key info
+    [--help, -h]    Display this text
+    [--info, -i]    Display all the user keys info
+    F [--info, -i]  Display key info
 Run:
                   Run 0 with default arguments
     F             Run F with default arguments
@@ -28,16 +28,16 @@ Run:
     
     Tip: Dot (.) skips argument assign
 Set:
-    F {O_SET} V    Set V to F
-    F {O_APP} V    Append V with the same logic as set
-    F {O_PRE} V    Prepend V with the same logic as set
-    F {O_STC} F2   Switch F with F2
+    F = V    Set V to F
+    F + V    Append V with the same logic as set
+    F - V    Prepend V with the same logic as set
+    F ^ F2   Switch F with F2
     
     Tip: "%%V" = The values of a function (cps F = %%V)
 Delete:
-    F {O_SET} .    Deletes F
-    F {O_APP} .    Deletes the last command of F
-    F {O_PRE} .    Deletes the first command of F
+    F = .    Deletes F
+    F + .    Deletes the last command of F
+    F - .    Deletes the first command of F
 Arguments:
     F %% A V       Set function F argument A value to V
     F %% A .       Deletes argument A from F

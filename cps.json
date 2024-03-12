@@ -1,0 +1,17 @@
+{
+    "0": [
+        {
+            "name": "CPS"
+        },
+        [
+            "cls",
+            "echo Hello, %%name!"
+        ]
+    ],
+    "a": [
+        {},
+        [
+            "echo Hola"
+        ]
+    ]
+}
