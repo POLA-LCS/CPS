@@ -2,7 +2,6 @@ import json
 from subprocess import run
 from os.path import dirname, abspath
 from sys import argv
-from typing import Any, List, Tuple, Dict
 
 PATH = dirname(abspath(__file__))
 JSON_PATH = PATH + '/cps.json'
@@ -20,9 +19,9 @@ O_STC = '#'
 C_INFO = ('--info', '-i')
 C_HELP = ('--help', '-h')
 
-CodeType = List[str]
-FuncType = Tuple[Dict[str, str], CodeType]
-DataBase = Dict[str, FuncType]
+CodeType = list[str]
+FuncType = tuple[dict[str, str], CodeType]
+DataBase = dict[str, FuncType]
 
 def get_blocks() -> DataBase:
     with open(JSON_PATH, 'r') as file:
@@ -50,7 +49,7 @@ def default_arguments(func: FuncType) -> CodeType:
     
     return new_code
 
-def replace_arguments(func: FuncType, input_param: List[str] | None = None) -> CodeType:
+def replace_arguments(func: FuncType, input_param: list[str] | None = None) -> CodeType:
     if not input_param:
         return default_arguments(func)
     param, code = func
