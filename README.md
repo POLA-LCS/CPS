@@ -21,53 +21,56 @@ The script supports dynamic argument substitution, macro management, and command
 Run the script from the command prompt using Python:
 
 ### Help and Info
-- `python cps.py --help` or `python cps.py -h`  
+- `cps.py --help` or `cps.py -h`  
   Display help information.
 
-- `python cps.py --info` or `python cps.py -i`  
+- `cps.py --info` or `cps.py -i`  
   Display all saved macros.
 
-- `python cps.py <macro> --info` or `python cps.py <macro> -i`  
+- `cps.py <macro> --info` or `cps.py <macro> -i`  
   Show details of a specific macro.
 
 ### Run Macros
-- `python cps.py`  
-  Run the default macro (ID `0`).
+- `cps.py`  
+  Run the default macro (named `0`).
 
-- `python cps.py <macro>`  
+- `cps.py <macro>`  
   Run the specified macro.
 
-- `python cps.py <macro> % <params>`  
+- `cps.py <macro> % <params>`  
   Run the specified macro with the provided arguments.
 
 ### Manage Macros
-- `python cps.py <macro> = <command>`  
-  Create or overwrite a macro with the given command.
+- `cps.py <macro> = <command>`  
+  Set or overwrite a macro with the given command.
 
-- `python cps.py <macro> + <command>`  
+- `cps.py <macro> = <%%macro2>`
+  Set a macro to another macro2.
+
+- `cps.py <macro> + <command>`  
   Append a command to the macro.
 
-- `python cps.py <macro> - <command>`  
+- `cps.py <macro> - <command>`  
   Prepend a command to the macro.
 
-- `python cps.py <macro> # <macro2>`  
+- `cps.py <macro> # <macro2>`  
   Switch the commands of `macro` and `macro2`.
 
 ### Delete Macros or Commands
-- `python cps.py <macro> = .`  
+- `cps.py <macro> = .`  
   Delete the macro.
 
-- `python cps.py <macro> + .`  
+- `cps.py <macro> + .`  
   Delete the last command from the macro.
 
-- `python cps.py <macro> - .`  
+- `cps.py <macro> - .`  
   Delete the first command from the macro.
 
 ### Manage Parameters
-- `python cps.py <macro> %% <param> <value>`  
+- `cps.py <macro> %% <param> <value>`  
   Set a parameter for the macro.
 
-- `python cps.py <macro> %% <param> .`  
+- `cps.py <macro> %% <param> .`  
   Delete a parameter from the macro.
 
 ## File Structure
@@ -77,10 +80,6 @@ Run the script from the command prompt using Python:
 - **Missing File**: If `cps.json` is not found, CPS will prompt you to create it.
 - **Key Errors**: If a macro or parameter doesn't exist, an error message will be displayed.
 - **Invalid JSON**: If the JSON data is corrupted, CPS will notify you.
-
-## License
-This project is licensed under the MIT License.
-
 ---
 
 Enjoy automating your command prompt tasks with CPS!
