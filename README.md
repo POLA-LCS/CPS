@@ -44,7 +44,7 @@ Run the script from the command prompt using Python:
 - `cps.py <macro> = <command>`  
   Set or overwrite a macro with the given command.
 
-- `cps.py <macro> = <%%macro2>`
+- `cps.py <macro> = <%%macro2>`  
   Set a macro to another macro2.
 
 - `cps.py <macro> + <command>`  
