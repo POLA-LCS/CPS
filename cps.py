@@ -2,6 +2,7 @@ import json
 from subprocess import run
 from os.path import dirname, abspath
 from sys import argv
+from platform import system
 
 PATH = dirname(abspath(__file__))
 JSON_PATH = PATH + '/cps.json'
@@ -20,23 +21,24 @@ C_INFO = ('--info', '-i')
 C_HELP = ('--help', '-h')
 
 CodeType = list[str]
-FuncType = tuple[dict[str, str], CodeType]
-DataBase = dict[str, FuncType]
+MacroType = tuple[dict[str, str], CodeType]
+DataBase = dict[str, MacroType]
 
 def get_blocks() -> DataBase:
     with open(JSON_PATH, 'r') as file:
         return json.load(file)
 
+DEFAULT_MACRO: tuple[str, MacroType] = ('0', ({'name': 'CPS'}, ['cls' if system() == 'Windows' else 'clear', 'echo Hello, %%name!']))
 def set_default(data: DataBase):
     with open(JSON_PATH, 'w') as file:
-        data.setdefault('0', ({'name': 'CPS'}, ['cls', 'echo Hello, %%name!']))
+        data.setdefault(*DEFAULT_MACRO)
         for macro in data:
             block = data[macro][1]
             if not isinstance(block, list):
                 data[macro] = (data[macro][0], [block])
         json.dump(data, file, indent=INDENT)
 
-def default_arguments(func: FuncType) -> CodeType:
+def default_arguments(func: MacroType) -> CodeType:
     param, code = func
     if len(param) == 0:
         return code
@@ -49,7 +51,7 @@ def default_arguments(func: FuncType) -> CodeType:
     
     return new_code
 
-def replace_arguments(func: FuncType, input_param: list[str] | None = None) -> CodeType:
+def replace_arguments(func: MacroType, input_param: list[str] | None = None) -> CodeType:
     if not input_param:
         return default_arguments(func)
     param, code = func
@@ -130,7 +132,7 @@ if __name__ == '__main__':
                     for macro in data:
                         if macro == '0':
                             continue
-                        print(f"  -  {macro} {data[macro][0]} : {data[MACRO][1]}")
+                        print(f"  -  {macro} {data[macro][0]} : {data[macro][1]}")
             else: # cps <m>
                 # DEFAULT RUN
                 run_commands(replace_arguments(data[argv[1]]))
