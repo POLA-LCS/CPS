@@ -30,10 +30,10 @@ def get_blocks() -> DataBase:
 def set_default(data: DataBase):
     with open(JSON_PATH, 'w') as file:
         data.setdefault('0', ({'name': 'CPS'}, ['cls', 'echo Hello, %%name!']))
-        for key in data:
-            block = data[key][1]
+        for macro in data:
+            block = data[macro][1]
             if not isinstance(block, list):
-                data[key] = (data[key][0], [block])
+                data[macro] = (data[macro][0], [block])
         json.dump(data, file, indent=INDENT)
 
 def default_arguments(func: FuncType) -> CodeType:
@@ -73,34 +73,38 @@ def run_commands(func: CodeType):
     
 def display_help():
     print(f"""[CPS] Help:
+          
 Nomenclature:
-    F = Function  :    The name of a function
-    V = Value     :    A string value
+    M = Macro     :    The name of a macro
+    P = Prompt    :    A command prompt
 Info:
-    cps ({C_HELP[0]} | {C_HELP[1]})    Display this text
-    cps ({C_INFO[0]} | {C_INFO[1]})    Display all the user keys info
-    cps F ({C_INFO[0]} | {C_INFO[1]})  Display key info
+    ({C_HELP[0]} | {C_HELP[1]})    Display this text
+    ({C_INFO[0]} | {C_INFO[1]})    Display all the user MACROs info
+    M ({C_INFO[0]} | {C_INFO[1]})  Display macro info
 Run:
-    cps               Run 0 with default arguments
-    cps F             Run F with default arguments
-    cps F % <p...>    Run F with arguments <p>
+    <nothing>     Run default macro with default arguments
+    M             Run M with default arguments
+    M % <p...>    Run M with arguments <p>
     
     Tip: Dot (.) skips argument assign
 Set:
-    cps F {O_SET} V    Set V to F
-    cps F {O_APP} V    Append V with the same logic as set
-    cps F {O_PRE} V    Prepend V with the same logic as set
-    cps F {O_STC} F2   Switch F with F2
+    M {O_SET} P    Set P to M
+    M {O_APP} P    Append P with the same logic as set
+    M {O_PRE} P    Prepend P with the same logic as set
+    M {O_STC} M2   Switch M with M2
     
-    Tip: "%%V" = The values of a function (cps F = %%V)
+    Tip: To copy macros use (M = %%M2)
 Delete:
-    cps F {O_SET} .    Deletes F
-    cps F {O_APP} .    Deletes the last command of F
-    cps F {O_PRE} .    Deletes the first command of F
+    M {O_SET} .    Deletes M
+    M {O_APP} .    Deletes the last command of M
+    M {O_PRE} .    Deletes the first command of M
 Arguments:
-    cps F %% A V       Set function F argument A value to V
-    cps F %% A .       Deletes argument A from F
+    M %% A P       Set macro M argument A prompt to P
+    M %% A .       Deletes argument A from M
     """)
+
+def print_cps(message: str):
+    print(f"[CPS] {message}")
 
 if __name__ == '__main__':
     try:
@@ -118,66 +122,66 @@ if __name__ == '__main__':
             elif argv[1] in C_INFO: # cps --info
                 # INFO (SKIPS 0 IF THERE'S MORE)
                 if len(data) == 1:
-                    print(f"[CPS] 0 {data['0'][0]}")
+                    print_cps(f"0 {data['0'][0]}")
                     for line in data['0'][1]:
                         print(f"  - {line}")
                 else:
-                    print("[CPS] Info:")
-                    for key in data:
-                        if key == '0':
+                    print_cps("Info:")
+                    for macro in data:
+                        if macro == '0':
                             continue
-                        print(f"  -  {key} {data[key][0]} : {data[key][1]}")
-            else: # cps <k>
+                        print(f"  -  {macro} {data[macro][0]} : {data[MACRO][1]}")
+            else: # cps <m>
                 # DEFAULT RUN
                 run_commands(replace_arguments(data[argv[1]]))
         elif argc >= 3:
-            if argv[2] == O_SET_PARAM: # cps <k> %% <param> <value>
-                # SET A KEY PARAMETER
+            if argv[2] == O_SET_PARAM: # cps <m> %% <param> <prompt>
+                # SET A MACRO PARAMETER
                 if argv[4] == '.':
                     del data[argv[1]][0][argv[3]]
                     print(f"[CPS] {argv[1]} -> {argv[3]} was deleted.")
                 else:
                     data[argv[1]][0][argv[3]] = argv[4]
-            elif argv[2] == O_PARAM: # cps <k> % <p...>
-                # RUN KEY WITH PARAMETERS
+            elif argv[2] == O_PARAM: # cps <m> % <p...>
+                # RUN MACRO WITH PARAMETERS
                 run_commands(replace_arguments(data[argv[1]], argv[3:]))
             elif argc == 3:
-                # check if the value is a key
-                values = argv[3].split(' ')
+                # check if the prompt is a macro
+                prompts = argv[3].split(' ')
                 bar = None
-                if len(values) == 1 and values[0].startswith(O_SET_PARAM):
-                    bar = values[0][2:]
-                if argv[2] == O_SET: # cps <k> = <value / key>
-                    # SET TO KEY A VALUE
-                    if argv[3] == '.': # deletes key
+                if len(prompts) == 1 and prompts[0].startswith(O_SET_PARAM):
+                    bar = prompts[0][2:]
+                if argv[2] == O_SET: # cps <m> = <prompt / macro>
+                    # SET TO macro A prompt
+                    if argv[3] == '.': # deletes macro
                         del data[argv[1]]
                         print(f"[CPS] Deleted: {argv[1]}")
                     elif data.get(argv[1]):
-                        if bar: # set key values to key
+                        if bar: # set macro prompts to macro
                             data[argv[1]][1] = data[bar][1]
-                        else: # set value to key
+                        else: # set prompt to macro
                             data[argv[1]][1] = [argv[3]]
-                    elif bar: # create key with key values
+                    elif bar: # create macro with macro prompts
                         data[argv[1]] = data[bar]
                         print(f"[CPS] Created: {argv[1]}")
-                    else: # create key with value
+                    else: # create macro with prompt
                         data[argv[1]] = ({}, [argv[3]])
                         print(f"[CPS] Created: {argv[1]}")
-                elif argv[2] == O_APP: # cps <k> + <value / key>
-                    # APPEND TO KEY A VALUE
+                elif argv[2] == O_APP: # cps <m> + <prompt / macro>
+                    # APPEND TO macro A prompt
                     if argv[3] == '.': # deletes the last command
                         del data[argv[1]][1][-1]
-                    elif bar: # appends a key values
+                    elif bar: # appends a macro prompts
                         data[argv[1]][1] += data[bar][1]
-                    else: # appends a value
+                    else: # appends a prompt
                         data[argv[1]][1].append(argv[3])
                 elif argv[2] == O_PRE:
-                    # PREPEND TO KEY A VALUE
+                    # PREPEND TO macro A prompt
                     if argv[3] == '.': # deletes the first command
                         del data[argv[1]][1][0]
-                    elif bar: # prepends a key values
+                    elif bar: # prepends a macro prompts
                         data[argv[1]][1] = data[bar][1] + data[argv[1]][1]
-                    else: # prepends a value
+                    else: # prepends a prompt
                         data[argv[1]][1] = [argv[3]] + data[argv[1]][1]
                 elif argv[2] == O_STC:
                     data[argv[1]], data[argv[3]] = data[argv[3]], data[argv[1]]
@@ -188,8 +192,8 @@ if __name__ == '__main__':
                 run_commands(replace_arguments(data['0'], argv[2:]))
             elif argc == 2:
                 first = data[argv[1]]
-                if argv[2] in C_INFO: # cps <k> --info
-                    # KEY INFO
+                if argv[2] in C_INFO: # cps <m> --info
+                    # MACRO INFO
                     print(f"[CPS] {argv[1]} {first[0]}:")
                     for line in first[1]:
                         print(f"  -  {line}")
