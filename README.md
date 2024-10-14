@@ -1,44 +1,86 @@
-# CPS - Command Prompt Saver
-This is software designed for those who are accustomed to the command console to minimize command repetition or at least make it more dynamic. The program comes integrated with basic functions such as creating aliases for code blocks, quick ways to modify these blocks, and more specific ones like typing character by character in a command. It can call itself and can become very powerful if used skillfully. I'm open to proposals for the software as it will be open-source.
-## Just available in Windows 10+
-It uses batch commands and it is created with Python "subprocess", "os" and "sys" so maybe it isn't compatible with Linux or other OS. 
+# CPS: Command Prompt Saver
+
+CPS is a script designed to optimize the use of the terminal commands (Either Windows or Linux).
+It allows users to create, save, and run macros (blocks of commands), minimizing repetitive tasks.
+The script supports dynamic argument substitution, macro management, and command organization.
+
+## Features
+- **Macro Management**: Save, delete, append, and prepend commands to macros.
+- **Argument Substitution**: Customize macros with dynamic arguments.
+- **Macro Copying**: Switch or copy commands between macros.
+- **Command Execution**: Run predefined macros or ad-hoc commands easily.
+
+## Requirements
+- Python 3.x
+
+## Installation
+1. Clone this repository or download the `cps.py` file.
+2. Ensure that `cps.json` (the macro storage file) exists in the same directory as the script. If not, CPS will prompt you to create one.
 
 ## Usage
-- Set a directory for CPS (make sure it's not read-only).
-- Run `cps.py` without parameters (this might create the `cps.json` file and fill it with default values).
-- Add the directory to PATH.
-- Type `cps --help` in another directory to make sure it works.
-- Start creating your first function.
-- - -
-### CODE: This is the view when you run `cps --help` or `cps -h`
-```
-[CPS] Help:
-Nomenclature:
-    F = Function   :    The name of a function
-    V = Value      :    A string value
-    %%V = F values :    The code of a function
-Info:
-    cps (--help | -h)    Display this text
-    cps (--info | -i)    Display all the user keys info
-    cps F (--info | -i)  Display key info
-Run:
-    cps               Run 0 with default arguments
-    cps F             Run F with default arguments
-    cps F % <p...>    Run F with arguments <p>
-    
-    Tip: Dot (.) skips argument assign
-Set:
-    cps F = V    Set V to F
-    cps F + V    Append V with the same logic as set
-    cps F - V    Prepend V with the same logic as set
-    cps F ^ F2   Switch F with F2
-    
-    Tip: "%%V" = The values of a function (cps F = %%V)
-Delete:
-    cps F = .    Deletes F
-    cps F + .    Deletes the last command of F
-    cps F - .    Deletes the first command of F
-Arguments:
-    cps F %% A V       Set function F argument A value to V
-    cps F %% A .       Deletes argument A from F
-```
+Run the script from the command prompt using Python:
+
+### Help and Info
+- `python cps.py --help` or `python cps.py -h`  
+  Display help information.
+
+- `python cps.py --info` or `python cps.py -i`  
+  Display all saved macros.
+
+- `python cps.py <macro> --info` or `python cps.py <macro> -i`  
+  Show details of a specific macro.
+
+### Run Macros
+- `python cps.py`  
+  Run the default macro (ID `0`).
+
+- `python cps.py <macro>`  
+  Run the specified macro.
+
+- `python cps.py <macro> % <params>`  
+  Run the specified macro with the provided arguments.
+
+### Manage Macros
+- `python cps.py <macro> = <command>`  
+  Create or overwrite a macro with the given command.
+
+- `python cps.py <macro> + <command>`  
+  Append a command to the macro.
+
+- `python cps.py <macro> - <command>`  
+  Prepend a command to the macro.
+
+- `python cps.py <macro> # <macro2>`  
+  Switch the commands of `macro` and `macro2`.
+
+### Delete Macros or Commands
+- `python cps.py <macro> = .`  
+  Delete the macro.
+
+- `python cps.py <macro> + .`  
+  Delete the last command from the macro.
+
+- `python cps.py <macro> - .`  
+  Delete the first command from the macro.
+
+### Manage Parameters
+- `python cps.py <macro> %% <param> <value>`  
+  Set a parameter for the macro.
+
+- `python cps.py <macro> %% <param> .`  
+  Delete a parameter from the macro.
+
+## File Structure
+- **cps.json**: This file stores macros in JSON format. Each macro has a name and a list of commands associated with it.
+
+## Error Handling
+- **Missing File**: If `cps.json` is not found, CPS will prompt you to create it.
+- **Key Errors**: If a macro or parameter doesn't exist, an error message will be displayed.
+- **Invalid JSON**: If the JSON data is corrupted, CPS will notify you.
+
+## License
+This project is licensed under the MIT License.
+
+---
+
+Enjoy automating your command prompt tasks with CPS!
