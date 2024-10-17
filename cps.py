@@ -1,6 +1,6 @@
 import json
-from subprocess import run
 from os.path import dirname, abspath
+from subprocess import run
 from sys import argv
 from platform import system
 
@@ -20,8 +20,9 @@ O_STC = '#'
 C_INFO = ('--info', '-i')
 C_HELP = ('--help', '-h')
 
+ParamType = dict[str, str]
 CodeType = list[str]
-MacroType = tuple[dict[str, str], CodeType]
+MacroType = tuple[ParamType, CodeType]
 DataBase = dict[str, MacroType]
 
 def get_blocks() -> DataBase:
@@ -38,8 +39,8 @@ def set_default(data: DataBase):
                 data[macro] = (data[macro][0], [block])
         json.dump(data, file, indent=INDENT)
 
-def default_arguments(func: MacroType) -> CodeType:
-    param, code = func
+def default_arguments(macro: MacroType) -> CodeType:
+    param, code = macro
     if len(param) == 0:
         return code
     new_code: CodeType = []
@@ -51,10 +52,10 @@ def default_arguments(func: MacroType) -> CodeType:
     
     return new_code
 
-def replace_arguments(func: MacroType, input_param: list[str] | None = None) -> CodeType:
+def replace_arguments(macro: MacroType, input_param: list[str] | None = None) -> CodeType:
     if not input_param:
-        return default_arguments(func)
-    param, code = func
+        return default_arguments(macro)
+    param, code = macro
     if len(param) == 0:
         return code
     new_code: CodeType = []
@@ -69,8 +70,8 @@ def replace_arguments(func: MacroType, input_param: list[str] | None = None) -> 
         new_code.append(line)
     return new_code
     
-def run_commands(func: CodeType):
-    for comm in func:
+def run_commands(macro: CodeType):
+    for comm in macro:
         run(comm, shell=True)
     
 def display_help():
