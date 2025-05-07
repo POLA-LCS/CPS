@@ -4,6 +4,11 @@ from subprocess import run
 from sys import argv
 from platform import system
 
+"""
+    THIS SOFTWARE IS DEPRECATED !!!
+    CPS v2.0 in https://github.com/POLA-LCS/CPS-v2
+"""
+
 PATH = dirname(abspath(__file__))
 JSON_PATH = PATH + '/cps.json'
 INDENT = 4
